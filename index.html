@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101114">
+  <meta name="description" content="Aplicativo pessoal de rolagem de dados para RPG.">
+  <title>Rolagem RPG</title>
+
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+  <div class="app-container">
+
+    <header class="app-header">
+      <div class="brand">
+        <div class="brand-icon">✦</div>
+        <div>
+          <h1>Rolagem RPG</h1>
+          <p>Seu destino está nos dados.</p>
+        </div>
+      </div>
+
+      <button
+        id="settings-button"
+        class="icon-button"
+        type="button"
+        aria-label="Abrir configurações"
+        title="Configurações"
+      >⚙</button>
+    </header>
+
+    <main>
+      <section class="dice-section">
+        <div class="section-heading">
+          <div>
+            <h2>Escolha seus dados</h2>
+            <p>Selecione quantos dados deseja rolar.</p>
+          </div>
+        </div>
+
+        <div class="dice-grid" id="dice-grid">
+
+          <article class="dice-card" data-die="2">
+            <div class="die-symbol">D2</div>
+            <div class="die-description">2 lados</div>
+            <div class="quantity-control">
+              <button type="button" class="quantity-button" data-action="decrease" aria-label="Diminuir D2">−</button>
+              <input class="quantity-input" id="quantity-d2" type="number" min="0" max="1000" step="1" value="0" inputmode="numeric" aria-label="Quantidade de D2">
+              <button type="button" class="quantity-button" data-action="increase" aria-label="Aumentar D2">+</button>
+            </div>
+          </article>
+
+          <article class="dice-card" data-die="4">
+            <div class="die-symbol">D4</div>
+            <div class="die-description">4 lados</div>
+            <div class="quantity-control">
+              <button type="button" class="quantity-button" data-action="decrease" aria-label="Diminuir D4">−</button>
+              <input class="quantity-input" id="quantity-d4" type="number" min="0" max="1000" step="1" value="0" inputmode="numeric" aria-label="Quantidade de D4">
+              <button type="button" class="quantity-button" data-action="increase" aria-label="Aumentar D4">+</button>
+            </div>
+          </article>
+
+          <article class="dice-card" data-die="6">
+            <div class="die-symbol">D6</div>
+            <div class="die-description">6 lados</div>
+            <div class="quantity-control">
+              <button type="button" class="quantity-button" data-action="decrease" aria-label="Diminuir D6">−</button>
+              <input class="quantity-input" id="quantity-d6" type="number" min="0" max="1000" step="1" value="0" inputmode="numeric" aria-label="Quantidade de D6">
+              <button type="button" class="quantity-button" data-action="increase" aria-label="Aumentar D6">+</button>
+            </div>
+          </article>
+
+          <article class="dice-card" data-die="8">
+            <div class="die-symbol">D8</div>
+            <div class="die-description">8 lados</div>
+            <div class="quantity-control">
+              <button type="button" class="quantity-button" data-action="decrease" aria-label="Diminuir D8">−</button>
+              <input class="quantity-input" id="quantity-d8" type="number" min="0" max="1000" step="1" value="0" inputmode="numeric" aria-label="Quantidade de D8">
+              <button type="button" class="quantity-button" data-action="increase" aria-label="Aumentar D8">+</button>
+            </div>
+          </article>
+
+          <article class="dice-card" data-die="10">
+            <div class="die-symbol">D10</div>
+            <div class="die-description">10 lados</div>
+            <div class="quantity-control">
+              <button type="button" class="quantity-button" data-action="decrease" aria-label="Diminuir D10">−</button>
+              <input class="quantity-input" id="quantity-d10" type="number" min="0" max="1000" step="1" value="0" inputmode="numeric" aria-label="Quantidade de D10">
+              <button type="button" class="quantity-button" data-action="increase" aria-label="Aumentar D10">+</button>
+            </div>
+          </article>
+
+          <article class="dice-card" data-die="12">
+            <div class="die-symbol">D12</div>
+            <div class="die-description">12 lados</div>
+            <div class="quantity-control">
+              <button type="button" class="quantity-button" data-action="decrease" aria-label="Diminuir D12">−</button>
+              <input class="quantity-input" id="quantity-d12" type="number" min="0" max="1000" step="1" value="0" inputmode="numeric" aria-label="Quantidade de D12">
+              <button type="button" class="quantity-button" data-action="increase" aria-label="Aumentar D12">+</button>
+            </div>
+          </article>
+
+          <article class="dice-card" data-die="20">
+            <div class="die-symbol">D20</div>
+            <div class="die-description">20 lados</div>
+            <div class="quantity-control">
+              <button type="button" class="quantity-button" data-action="decrease" aria-label="Diminuir D20">−</button>
+              <input class="quantity-input" id="quantity-d20" type="number" min="0" max="1000" step="1" value="0" inputmode="numeric" aria-label="Quantidade de D20">
+              <button type="button" class="quantity-button" data-action="increase" aria-label="Aumentar D20">+</button>
+            </div>
+          </article>
+
+          <article class="dice-card" data-die="100">
+            <div class="die-symbol">D100</div>
+            <div class="die-description">100 lados</div>
+            <div class="quantity-control">
+              <button type="button" class="quantity-button" data-action="decrease" aria-label="Diminuir D100">−</button>
+              <input class="quantity-input" id="quantity-d100" type="number" min="0" max="1000" step="1" value="0" inputmode="numeric" aria-label="Quantidade de D100">
+              <button type="button" class="quantity-button" data-action="increase" aria-label="Aumentar D100">+</button>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="selection-summary" id="selection-summary">
+          <span>Dados selecionados</span>
+          <strong id="selected-count">0</strong>
+        </div>
+
+        <button id="roll-button" class="primary-button" type="button">
+          <span class="button-icon">✦</span>
+          Rolar dados
+        </button>
+      </section>
+
+      <section class="result-section" id="result-section" aria-live="polite" hidden>
+        <div class="section-heading">
+          <div>
+            <h2>Resultado</h2>
+            <p>Resumo da sua rolagem.</p>
+          </div>
+        </div>
+
+        <div class="result-card">
+          <div class="result-total-label">Soma total</div>
+          <div class="result-total" id="result-total">0</div>
+          <div class="result-details" id="result-details"></div>
+          <div class="result-dice-count" id="result-dice-count"></div>
+        </div>
+      </section>
+
+      <section class="history-section">
+        <div class="section-heading">
+          <div>
+            <h2>Histórico</h2>
+            <p>Suas últimas 10 rolagens.</p>
+          </div>
+          <button id="clear-history-button" class="text-button" type="button">
+            Limpar
+          </button>
+        </div>
+
+        <div id="history-list" class="history-list">
+          <div class="history-empty">
+            <span class="empty-icon">◇</span>
+            <p>Nenhuma rolagem realizada.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <span>ROLAGEM RPG</span>
+      <span>Boa aventura.</span>
+    </footer>
+  </div>
+
+  <dialog id="settings-dialog" class="settings-dialog">
+    <div class="dialog-header">
+      <div>
+        <h2>Configurações</h2>
+        <p>Personalize suas rolagens.</p>
+      </div>
+      <button id="close-settings-button" class="icon-button" type="button" aria-label="Fechar configurações">✕</button>
+    </div>
+
+    <div class="setting-option">
+      <label for="cut-select">Configuração de corte</label>
+      <p>Define a distribuição mínima das somas.</p>
+      <select id="cut-select">
+        <option value="30">30%</option>
+        <option value="50">50%</option>
+        <option value="60">60%</option>
+        <option value="70" selected>70%</option>
+        <option value="80">80%</option>
+        <option value="90">90%</option>
+        <option value="100">100%</option>
+      </select>
+    </div>
+
+    <div class="dialog-footer">
+      <button id="save-settings-button" class="primary-button" type="button">
+        Salvar configurações
+      </button>
+    </div>
+  </dialog>
+
+  <dialog id="history-menu-dialog" class="history-menu-dialog">
+    <div class="dialog-header">
+      <h2>Opções do registro</h2>
+      <button id="close-history-menu-button" class="icon-button" type="button" aria-label="Fechar">✕</button>
+    </div>
+    <p>Deseja excluir esta rolagem do histórico?</p>
+    <button id="delete-history-item-button" class="danger-button" type="button">
+      Excluir registro
+    </button>
+  </dialog>
+
+</body>
+</html>
