@@ -98,6 +98,20 @@ function loadState() {
               DICE_TYPES.includes(group.faces) &&
               Number.isInteger(group.count) &&
               group.count > 0
+            ) &&
+            (
+              item.results === undefined ||
+              (
+                Array.isArray(item.results) &&
+                item.results.length === item.diceCount &&
+                item.results.every(result =>
+                  result &&
+                  DICE_TYPES.includes(result.faces) &&
+                  Number.isInteger(result.value) &&
+                  result.value >= 1 &&
+                  result.value <= result.faces
+                )
+              )
             )
           )
           .slice(0, HISTORY_LIMIT)
@@ -243,7 +257,6 @@ function saveQuantities() {
 function distributeTotal(dice, total) {
   const shuffledDice = shuffleArray([...dice]);
 
-  // Soma máxima possível dos dados que ainda serão distribuídos.
   const suffixMaximum = new Array(shuffledDice.length + 1).fill(0);
 
   for (let i = shuffledDice.length - 1; i >= 0; i--) {
@@ -259,7 +272,6 @@ function distributeTotal(dice, total) {
     const remainingDice = shuffledDice.length - i - 1;
     const remainingMaximum = suffixMaximum[i + 1];
 
-    // Garante que os dados restantes consigam completar a soma.
     const minimumAllowed = Math.max(
       1,
       remainingTotal - remainingMaximum
@@ -316,20 +328,16 @@ function rollDice() {
       0
     );
 
-    // O corte define o piso mínimo da soma total.
     const minimumTotal = Math.ceil(
       maximumTotal * state.cut / 100
     );
 
-    // Com corte de 100%, todos os dados atingem o máximo.
     const total = state.cut === 100
       ? maximumTotal
       : randomInteger(minimumTotal, maximumTotal);
 
-    // Distribui a soma entre os dados sem ultrapassar seus limites.
     const individualResults = distributeTotal(dice, total);
 
-    // Agrupa os dados por tipo, sem guardar os resultados individuais.
     const groupsMap = new Map();
 
     for (const result of individualResults) {
@@ -348,13 +356,14 @@ function rollDice() {
 
     const diceCount = dice.length;
 
-    showResult(total, groups, diceCount);
+    showResult(total, individualResults, diceCount);
 
     const historyItem = {
       id: createHistoryId(),
       total,
       diceCount,
       groups,
+      results: individualResults,
       date: new Date().toISOString()
     };
 
@@ -379,16 +388,57 @@ function createHistoryId() {
 }
 
 /* =========================================
-   EXIBIÇÃO DOS RESULTADOS
+   EXIBIÇÃO DOS RESULTADOS INDIVIDUAIS
 ========================================= */
 
-function showResult(total, groups, diceCount) {
+function groupIndividualResults(results) {
+  const grouped = new Map();
+
+  for (const result of results) {
+    if (!grouped.has(result.faces)) {
+      grouped.set(result.faces, []);
+    }
+
+    grouped.get(result.faces).push(result.value);
+  }
+
+  return grouped;
+}
+
+function formatIndividualResults(results) {
+  return DICE_TYPES
+    .filter(faces => results.some(result => result.faces === faces))
+    .map(faces => {
+      const values = results
+        .filter(result => result.faces === faces)
+        .map(result => result.value);
+
+      return {
+        faces,
+        values
+      };
+    });
+}
+
+function showResult(total, individualResults, diceCount) {
   resultTotal.textContent = total.toLocaleString("pt-BR");
   resultDetails.replaceChildren();
 
-  for (const group of groups) {
+  const groupedResults = formatIndividualResults(individualResults);
+
+  for (const group of groupedResults) {
     const tag = document.createElement("span");
-    tag.textContent = `${group.count} × D${group.faces}`;
+    tag.className = "result-group";
+
+    const label = document.createElement("strong");
+    label.className = "result-group-label";
+    label.textContent = `D${group.faces}:`;
+
+    const values = document.createElement("span");
+    values.className = "result-group-values";
+    values.textContent = group.values.join(" + ");
+
+    tag.append(label, values);
     resultDetails.appendChild(tag);
   }
 
@@ -444,8 +494,26 @@ function renderHistory() {
       details.appendChild(tag);
     }
 
+    main.appendChild(details);
+
+    if (Array.isArray(item.results) && item.results.length > 0) {
+      const rolls = document.createElement("div");
+      rolls.className = "history-item-rolls";
+
+      const groupedResults = formatIndividualResults(item.results);
+
+      for (const group of groupedResults) {
+        const line = document.createElement("div");
+        line.textContent =
+          `D${group.faces}: ${group.values.join(" + ")}`;
+        rolls.appendChild(line);
+      }
+
+      main.appendChild(rolls);
+    }
+
     const date = document.createElement("div");
-    date.className = "history-item-details";
+    date.className = "history-item-date";
 
     const parsedDate = new Date(item.date);
 
@@ -458,7 +526,7 @@ function renderHistory() {
           minute: "2-digit"
         });
 
-    main.append(details, date);
+    main.appendChild(date);
 
     const total = document.createElement("strong");
     total.className = "history-item-total";
